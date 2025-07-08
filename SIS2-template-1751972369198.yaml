@@ -1,0 +1,1010 @@
+---
+Metadata:
+  AWSToolsMetrics:
+    IaC_Generator: "arn:aws:cloudformation:ap-southeast-1:032425924378:generatedTemplate/92b72bda-d837-47b4-86a6-24b4b12d68e6"
+Resources:
+  IAMRoleRdsmonitoringrole:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
+      MaxSessionDuration: 3600
+      RoleName: "rds-monitoring-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "monitoring.rds.amazonaws.com"
+          Sid: ""
+  EC2SubnetNetworkAclAssociation:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      NetworkAclId:
+        Ref: "EC2NetworkAcl"
+      SubnetId:
+        Ref: "EC2SubnetSS"
+  EC2NetworkInterfaceXb:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::NetworkInterface"
+    DeletionPolicy: "Delete"
+    Properties:
+      Description: "Interface for NAT Gateway nat-09d8c82a41d6c2de2"
+      PrivateIpAddress: "10.0.0.28"
+      PrivateIpAddresses:
+      - PrivateIpAddress: "10.0.0.28"
+        Primary: true
+      SecondaryPrivateIpAddressCount: 0
+      Ipv6PrefixCount: 0
+      Ipv4Prefixes: []
+      Ipv4PrefixCount: 0
+      GroupSet: []
+      Ipv6Prefixes: []
+      SubnetId:
+        Ref: "EC2SubnetXi"
+      SourceDestCheck: false
+      InterfaceType: "null"
+      Tags: []
+      PublicIpDnsNameOptions:
+        DnsHostnameType: "public-ipv4-dns-name"
+        PublicIpv4DnsName: "ec2-52-77-12-163.ap-southeast-1.compute.amazonaws.com"
+  EC2RouteTableDq:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::RouteTable"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "EC2VPC"
+      Tags:
+      - Value: "private-RT"
+        Key: "Name"
+  EC2SubnetRouteTableAssociationXy:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      RouteTableId:
+        Ref: "EC2RouteTableDq"
+      SubnetId:
+        Ref: "EC2SubnetYK"
+  EC2NatGateway:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::NatGateway"
+    DeletionPolicy: "Delete"
+    Properties:
+      PrivateIpAddress: "10.0.0.28"
+      ConnectivityType: "public"
+      VpcId: "vpc-06ec7f382e01f5637"
+      EniId: "eni-0f4ae12b5b2773535"
+      AllocationId:
+        Fn::GetAtt:
+        - "EC2EIP527712163"
+        - "AllocationId"
+      SubnetId:
+        Ref: "EC2SubnetXi"
+      Tags:
+      - Value: "mynat"
+        Key: "Name"
+  EC2SubnetNetworkAclAssociationXK:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      NetworkAclId:
+        Ref: "EC2NetworkAcl"
+      SubnetId:
+        Ref: "EC2Subnet"
+  EC2SubnetSS:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      MapPublicIpOnLaunch: false
+      EnableDns64: false
+      VpcId:
+        Ref: "EC2VPC"
+      AvailabilityZoneId: "apse1-az1"
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: "10.0.0.32/28"
+      Ipv6Native: false
+      Tags:
+      - Value: "private-sb 1"
+        Key: "Name"
+  KMSAliasAliasKMSkey:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::KMS::Alias"
+    DeletionPolicy: "Delete"
+    Properties:
+      TargetKeyId:
+        Ref: "KMSKeyXq"
+      AliasName: "alias/KMSkey"
+  EC2Instance:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Instance"
+    DeletionPolicy: "Delete"
+    Properties:
+      Tenancy: "default"
+      SecurityGroups:
+      - "mySG1"
+      PrivateIpAddress: "10.0.0.22"
+      BlockDeviceMappings:
+      - Ebs:
+          SnapshotId: "snap-0839202f8824e33c8"
+          VolumeType: "gp2"
+          Iops: 100
+          VolumeSize: 8
+          Encrypted: false
+          DeleteOnTermination: true
+        DeviceName: "/dev/xvda"
+      IamInstanceProfile:
+        Ref: "IAMInstanceProfileMyEC2Role"
+      SubnetId:
+        Ref: "EC2SubnetXi"
+      EbsOptimized: false
+      Volumes:
+      - VolumeId: "vol-054a51dd13fe0d29f"
+        Device: "/dev/xvda"
+      NetworkInterfaces:
+      - PrivateIpAddresses:
+        - PrivateIpAddress: "10.0.0.22"
+          Primary: true
+        SecondaryPrivateIpAddressCount: 0
+        DeviceIndex: "0"
+        GroupSet:
+        - Ref: "EC2SecurityGroupS8"
+        Ipv6Addresses: []
+        SubnetId:
+          Ref: "EC2SubnetXi"
+        AssociatePublicIpAddress: true
+        NetworkInterfaceId:
+          Ref: "EC2NetworkInterface"
+        DeleteOnTermination: true
+      ImageId: "ami-07ebc46e9d014b560"
+      InstanceType: "t2.micro"
+      Monitoring: false
+      Tags:
+      - Value: "mywebserver1"
+        Key: "Name"
+      InstanceInitiatedShutdownBehavior: "stop"
+      CpuOptions:
+        ThreadsPerCore: 1
+        CoreCount: 1
+      AvailabilityZone: "ap-southeast-1a"
+      PrivateDnsNameOptions:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      SecurityGroupIds:
+      - "sg-0dcf5f013bd198240"
+      DisableApiTermination: false
+      KeyName: "Daniyal1"
+      SourceDestCheck: true
+      PlacementGroupName: ""
+      VpcId: "vpc-06ec7f382e01f5637"
+      State:
+        Code: "16"
+        Name: "running"
+      CreditSpecification:
+        CPUCredits: "standard"
+  CloudTrailTrailSIS:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::CloudTrail::Trail"
+    DeletionPolicy: "Delete"
+    Properties:
+      IncludeGlobalServiceEvents: true
+      EventSelectors: []
+      CloudWatchLogsRoleArn:
+        Fn::GetAtt:
+        - "IAMRoleMyCloudTrailRole"
+        - "Arn"
+      AdvancedEventSelectors:
+      - FieldSelectors:
+        - Field: "eventCategory"
+          Equals:
+          - "Management"
+        Name: "Management events selector"
+      TrailName: "SIS"
+      IsOrganizationTrail: false
+      InsightSelectors: []
+      CloudWatchLogsLogGroupArn:
+        Fn::GetAtt:
+        - "LogsLogGroupAwscloudtraillogs0324259243783853cbc5"
+        - "Arn"
+      IsMultiRegionTrail: true
+      S3BucketName:
+        Ref: "S3BucketAwscloudtraillogs032425924378f5bda51f"
+      EnableLogFileValidation: false
+      Tags: []
+      IsLogging: true
+  EC2EIPAssociation:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::EIPAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      PrivateIpAddress:
+        Fn::GetAtt:
+        - "EC2NetworkInterfaceXb"
+        - "PrimaryPrivateIpAddress"
+      NetworkInterfaceId:
+        Ref: "EC2NetworkInterfaceXb"
+      EIP:
+        Fn::GetAtt:
+        - "EC2EIP527712163"
+        - "PublicIp"
+      AllocationId:
+        Fn::GetAtt:
+        - "EC2EIP527712163"
+        - "AllocationId"
+  LogsLogGroupAwscloudtraillogs0324259243783853cbc5:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: "Delete"
+    Properties:
+      FieldIndexPolicies: []
+      LogGroupClass: "STANDARD"
+      LogGroupName: "aws-cloudtrail-logs-032425924378-3853cbc5"
+      DataProtectionPolicy: {}
+  EC2RouteEh:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Route"
+    DeletionPolicy: "Delete"
+    Properties:
+      RouteTableId:
+        Ref: "EC2RouteTable"
+      DestinationCidrBlock:
+        Fn::GetAtt:
+        - "EC2VPC"
+        - "CidrBlock"
+      GatewayId: "local"
+      VpcEndpointId: "local"
+  IAMInstanceProfileMyEC2Role:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::InstanceProfile"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      Roles:
+      - Ref: "IAMRoleMyEC2Role"
+      InstanceProfileName:
+        Ref: "IAMRoleMyEC2Role"
+  EC2DHCPOptions:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::DHCPOptions"
+    DeletionPolicy: "Delete"
+    Properties:
+      DomainName: "ap-southeast-1.compute.internal"
+      DomainNameServers:
+      - "AmazonProvidedDNS"
+      Tags: []
+  EC2VPCDHCPOptionsAssociationIN:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VPCDHCPOptionsAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "EC2VPCAj"
+      DhcpOptionsId:
+        Ref: "EC2DHCPOptions"
+  EC2Route:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Route"
+    DeletionPolicy: "Delete"
+    Properties:
+      RouteTableId:
+        Ref: "EC2RouteTable"
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId:
+        Ref: "EC2InternetGateway"
+      VpcEndpointId: "igw-0ce96e2bb63ec5548"
+  EC2RouteFC:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Route"
+    DeletionPolicy: "Delete"
+    Properties:
+      NatGatewayId:
+        Ref: "EC2NatGateway"
+      RouteTableId:
+        Ref: "EC2RouteTableDq"
+      DestinationCidrBlock: "0.0.0.0/0"
+  KMSKeyXq:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::KMS::Key"
+    DeletionPolicy: "Delete"
+    Properties:
+      Origin: "AWS_KMS"
+      MultiRegion: false
+      Description: "KMSkey"
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "*"
+          Action: "kms:*"
+          Effect: "Allow"
+          Principal:
+            AWS: "arn:aws:iam::032425924378:root"
+          Sid: "Enable IAM User Permissions"
+        - Resource: "*"
+          Action:
+          - "kms:Create*"
+          - "kms:Describe*"
+          - "kms:Enable*"
+          - "kms:List*"
+          - "kms:Put*"
+          - "kms:Update*"
+          - "kms:Revoke*"
+          - "kms:Disable*"
+          - "kms:Get*"
+          - "kms:Delete*"
+          - "kms:TagResource"
+          - "kms:UntagResource"
+          - "kms:ScheduleKeyDeletion"
+          - "kms:CancelKeyDeletion"
+          - "kms:RotateKeyOnDemand"
+          Effect: "Allow"
+          Principal:
+            AWS:
+            - "arn:aws:iam::032425924378:user/IAMadmin"
+            - "arn:aws:iam::032425924378:role/MyEC2Role"
+          Sid: "Allow access for Key Administrators"
+        - Resource: "*"
+          Action:
+          - "kms:Encrypt"
+          - "kms:Decrypt"
+          - "kms:ReEncrypt*"
+          - "kms:GenerateDataKey*"
+          - "kms:DescribeKey"
+          Effect: "Allow"
+          Principal:
+            AWS: "arn:aws:iam::032425924378:user/IAMadmin"
+          Sid: "Allow use of the key"
+        - Resource: "*"
+          Action:
+          - "kms:Encrypt"
+          - "kms:Decrypt"
+          Effect: "Allow"
+          Principal:
+            Service: "s3.amazonaws.com"
+          Sid: "Allow access for S3 principal"
+        - Condition:
+            Bool:
+              kms:GrantIsForAWSResource: "true"
+          Resource: "*"
+          Action:
+          - "kms:CreateGrant"
+          - "kms:ListGrants"
+          - "kms:RevokeGrant"
+          Effect: "Allow"
+          Principal:
+            AWS: "arn:aws:iam::032425924378:user/IAMadmin"
+          Sid: "Allow attachment of persistent resources"
+        Id: "key-consolepolicy-3"
+      KeySpec: "SYMMETRIC_DEFAULT"
+      Enabled: true
+      EnableKeyRotation: false
+      KeyUsage: "ENCRYPT_DECRYPT"
+      Tags: []
+  KMSKey:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::KMS::Key"
+    DeletionPolicy: "Delete"
+    Properties:
+      Origin: "AWS_KMS"
+      MultiRegion: false
+      Description: "Default key that protects my RDS database volumes when no other\
+        \ key is defined"
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+        - Condition:
+            StringEquals:
+              kms:CallerAccount: "032425924378"
+              kms:ViaService: "rds.ap-southeast-1.amazonaws.com"
+          Resource: "*"
+          Action:
+          - "kms:Encrypt"
+          - "kms:Decrypt"
+          - "kms:ReEncrypt*"
+          - "kms:GenerateDataKey*"
+          - "kms:CreateGrant"
+          - "kms:ListGrants"
+          - "kms:DescribeKey"
+          Effect: "Allow"
+          Principal:
+            AWS: "*"
+          Sid: "Allow access through RDS for all principals in the account that are\
+            \ authorized to use RDS"
+        - Resource: "*"
+          Action:
+          - "kms:Describe*"
+          - "kms:Get*"
+          - "kms:List*"
+          - "kms:RevokeGrant"
+          Effect: "Allow"
+          Principal:
+            AWS: "arn:aws:iam::032425924378:root"
+          Sid: "Allow direct access to key metadata to the account"
+        Id: "auto-rds-2"
+      KeySpec: "SYMMETRIC_DEFAULT"
+      Enabled: true
+      EnableKeyRotation: true
+      KeyUsage: "ENCRYPT_DECRYPT"
+      Tags: []
+  RDSDBInstance:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::RDS::DBInstance"
+    DeletionPolicy: "Delete"
+    Properties:
+      DatabaseInsightsMode: "standard"
+      StorageEncrypted: true
+      AssociatedRoles: []
+      Port: "3306"
+      ProcessorFeatures: []
+      StorageThroughput: 0
+      PreferredBackupWindow: "21:10-21:40"
+      MonitoringInterval: 0
+      DBParameterGroupName: "default.mysql8.0"
+      NetworkType: "IPV4"
+      DedicatedLogVolume: false
+      CopyTagsToSnapshot: true
+      MultiAZ: false
+      Engine: "mysql"
+      Tags: []
+      EngineLifecycleSupport: "open-source-rds-extended-support-disabled"
+      LicenseModel: "general-public-license"
+      EngineVersion: "8.0.41"
+      StorageType: "gp2"
+      KmsKeyId:
+        Fn::GetAtt:
+        - "KMSKey"
+        - "Arn"
+      DBInstanceClass: "db.t3.micro"
+      AvailabilityZone: "ap-southeast-1b"
+      OptionGroupName: "default:mysql-8-0"
+      PreferredMaintenanceWindow: "thu:14:22-thu:14:52"
+      EnablePerformanceInsights: false
+      AutoMinorVersionUpgrade: true
+      DBSubnetGroupName:
+        Ref: "RDSDBSubnetGroupDbsubnetgroup"
+      DeletionProtection: false
+      DBInstanceIdentifier: "myrds"
+      AllocatedStorage: "20"
+      BackupTarget: "region"
+      CACertificateIdentifier: "rds-ca-rsa2048-g1"
+      ManageMasterUserPassword: false
+      MasterUserSecret: {}
+      VPCSecurityGroups:
+      - Fn::GetAtt:
+        - "EC2SecurityGroupS8"
+        - "GroupId"
+      DBSecurityGroups: []
+      MasterUsername: "admin"
+      EnableIAMDatabaseAuthentication: false
+      BackupRetentionPeriod: 1
+      PubliclyAccessible: false
+      EnableCloudwatchLogsExports:
+      - "audit"
+      - "error"
+      - "general"
+  EC2VPCDHCPOptionsAssociation:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VPCDHCPOptionsAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "EC2VPC"
+      DhcpOptionsId:
+        Ref: "EC2DHCPOptions"
+  EC2RouteMc:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Route"
+    DeletionPolicy: "Delete"
+    Properties:
+      RouteTableId:
+        Ref: "EC2RouteTableDq"
+      DestinationCidrBlock:
+        Fn::GetAtt:
+        - "EC2VPC"
+        - "CidrBlock"
+      GatewayId: "local"
+      VpcEndpointId: "local"
+  EC2NetworkInterface:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::NetworkInterface"
+    DeletionPolicy: "Delete"
+    Properties:
+      Description: ""
+      PrivateIpAddress: "10.0.0.22"
+      PrivateIpAddresses:
+      - PrivateIpAddress: "10.0.0.22"
+        Primary: true
+      SecondaryPrivateIpAddressCount: 0
+      Ipv6PrefixCount: 0
+      Ipv4Prefixes: []
+      Ipv4PrefixCount: 0
+      GroupSet:
+      - "sg-0dcf5f013bd198240"
+      Ipv6Prefixes: []
+      SubnetId:
+        Ref: "EC2SubnetXi"
+      SourceDestCheck: true
+      InterfaceType: "interface"
+      Tags: []
+      PublicIpDnsNameOptions:
+        DnsHostnameType: "public-ipv4-dns-name"
+        PublicIpv4DnsName: "ec2-13-229-131-132.ap-southeast-1.compute.amazonaws.com"
+  EC2InternetGateway:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::InternetGateway"
+    DeletionPolicy: "Delete"
+    Properties:
+      Tags:
+      - Value: "myIGW"
+        Key: "Name"
+  EC2NetworkAcl:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::NetworkAcl"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "EC2VPC"
+      Tags: []
+  EC2Subnet:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      MapPublicIpOnLaunch: false
+      EnableDns64: false
+      VpcId:
+        Ref: "EC2VPC"
+      AvailabilityZoneId: "apse1-az2"
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: "10.0.0.0/28"
+      Ipv6Native: false
+      Tags:
+      - Value: "public-sb 2"
+        Key: "Name"
+  EC2NetworkInterfaceBQ:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::NetworkInterface"
+    DeletionPolicy: "Delete"
+    Properties:
+      Description: "RDSNetworkInterface"
+      PrivateIpAddress: "10.0.0.54"
+      PrivateIpAddresses:
+      - PrivateIpAddress: "10.0.0.54"
+        Primary: true
+      SecondaryPrivateIpAddressCount: 0
+      Ipv6PrefixCount: 0
+      Ipv4Prefixes: []
+      Ipv4PrefixCount: 0
+      GroupSet:
+      - "sg-0dcf5f013bd198240"
+      Ipv6Prefixes: []
+      SubnetId:
+        Ref: "EC2SubnetYK"
+      SourceDestCheck: true
+      InterfaceType: "interface"
+      Tags: []
+  EC2SecurityGroup:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SecurityGroup"
+    DeletionPolicy: "Delete"
+    Properties:
+      GroupDescription: "Created by RDS management console"
+      GroupName: "sis-db-sg"
+      VpcId:
+        Ref: "EC2VPC"
+      SecurityGroupIngress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 22
+        ToPort: 22
+      - CidrIp: "10.0.0.22/32"
+        IpProtocol: "tcp"
+        FromPort: 3306
+        ToPort: 3306
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 443
+        ToPort: 443
+      SecurityGroupEgress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "-1"
+        FromPort: -1
+        ToPort: -1
+  IAMUserIAMuser:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::User"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
+      UserName: "IAMuser"
+      LoginProfile:
+        PasswordResetRequired: false
+  EC2KeyPairDaniyal1:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::KeyPair"
+    DeletionPolicy: "Delete"
+    Properties:
+      KeyName: "Daniyal1"
+      KeyType: "rsa"
+      PublicKeyMaterial: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdnlMUKNmbmImijZFbbsPdMz2iE8X3Upopg0nyK+uIXBxnATN2E7froeYRSp2Xc60dTTAovNwdLl4MngygdlnMIOsXtDMMgy8pKKL0ViS/8HrSBdD3Ppt8VE7iafUt0NAlO/WYS0BvTMw6Rel/eI1nAU6AGgJjaUfZzF+0T8hx7Qr0Cw8HtTNdyJliTibr/0WatG7g/gkioq8M1ROdWDgWD+a9MydYvSB8b0583hi300YitvoAp81Of2kHVr2vE62KutXdu4iTp1FZfdD9MkGjXdY83CMIkl0HNwXGlAHGHoZ4nsEoXnK1JAFn4ADYVZmopxYxcdG7eiiOzAdbBDqT\
+        \ Daniyal1\n"
+      Tags: []
+  EC2SubnetYK:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      MapPublicIpOnLaunch: false
+      EnableDns64: false
+      VpcId:
+        Ref: "EC2VPC"
+      AvailabilityZoneId: "apse1-az2"
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: "10.0.0.48/28"
+      Ipv6Native: false
+      Tags:
+      - Value: "private-sb 2"
+        Key: "Name"
+  EC2SubnetXi:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Delete"
+    Properties:
+      MapPublicIpOnLaunch: false
+      EnableDns64: false
+      VpcId:
+        Ref: "EC2VPC"
+      AvailabilityZoneId: "apse1-az1"
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      CidrBlock: "10.0.0.16/28"
+      Ipv6Native: false
+      Tags:
+      - Value: "public-sb 1"
+        Key: "Name"
+  IAMUserIAMadmin:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::User"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+      - "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+      - "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+      UserName: "IAMadmin"
+      LoginProfile:
+        PasswordResetRequired: false
+  EC2SecurityGroupS8:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SecurityGroup"
+    DeletionPolicy: "Delete"
+    Properties:
+      GroupDescription: "Created by RDS management console"
+      GroupName: "mySG1"
+      VpcId:
+        Ref: "EC2VPC"
+      SecurityGroupIngress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 80
+        ToPort: 80
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 22
+        ToPort: 22
+      - CidrIp: "10.0.0.22/32"
+        IpProtocol: "tcp"
+        FromPort: 3306
+        ToPort: 3306
+      SecurityGroupEgress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "-1"
+        FromPort: -1
+        ToPort: -1
+  EC2SubnetRouteTableAssociationBb:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SubnetRouteTableAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      RouteTableId:
+        Ref: "EC2RouteTableDq"
+      SubnetId:
+        Ref: "EC2SubnetSS"
+  EC2VolumeAttachment:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VolumeAttachment"
+    DeletionPolicy: "Delete"
+    Properties:
+      InstanceId: "i-079c188b8e3ee83a6"
+      VolumeId: "vol-054a51dd13fe0d29f"
+      Device: "/dev/xvda"
+  EC2VPCAj:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VPC"
+    DeletionPolicy: "Delete"
+    Properties:
+      CidrBlock: "172.31.0.0/16"
+      EnableDnsSupport: true
+      InstanceTenancy: "default"
+      EnableDnsHostnames: true
+      Tags: []
+  S3BucketAwscloudtraillogs032425924378f5bda51f:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: "Delete"
+    Properties:
+      PublicAccessBlockConfiguration:
+        RestrictPublicBuckets: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        BlockPublicAcls: true
+      BucketName: "aws-cloudtrail-logs-032425924378-f5bda51f"
+      OwnershipControls:
+        Rules:
+        - ObjectOwnership: "BucketOwnerEnforced"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - BucketKeyEnabled: true
+          ServerSideEncryptionByDefault:
+            SSEAlgorithm: "aws:kms"
+            KMSMasterKeyID:
+              Fn::GetAtt:
+              - "KMSKeyXq"
+              - "Arn"
+  RDSDBSubnetGroupDbsubnetgroup:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::RDS::DBSubnetGroup"
+    DeletionPolicy: "Delete"
+    Properties:
+      DBSubnetGroupDescription: "DB Subnet Group"
+      SubnetIds:
+      - Ref: "EC2SubnetYK"
+      - Ref: "EC2SubnetSS"
+      DBSubnetGroupName: "db-subnetgroup"
+  IAMRoleMyCloudTrailRole:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::032425924378:policy/service-role/Cloudtrail-CW-access-policy-SIS-e87f9e43-8c1b-4160-af22-7fa34f585fe2"
+      MaxSessionDuration: 3600
+      RoleName: "MyCloudTrailRole"
+      Description: "Role for config CloudWathLogs for trail SIS"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Condition:
+            StringEquals:
+              aws:SourceAccount: "032425924378"
+              aws:SourceArn: "arn:aws:cloudtrail:ap-southeast-1:032425924378:trail/SIS"
+          Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "cloudtrail.amazonaws.com"
+  EC2SubnetNetworkAclAssociationFl:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      NetworkAclId:
+        Ref: "EC2NetworkAcl"
+      SubnetId:
+        Ref: "EC2SubnetYK"
+  IAMManagedPolicyPolicyserviceroleCloudtrailCWaccesspolicySISe87f9e438c1b4160af227fa34f585fe2:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      ManagedPolicyName: "Cloudtrail-CW-access-policy-SIS-e87f9e43-8c1b-4160-af22-7fa34f585fe2"
+      Path: "/service-role/"
+      Description: "Policy for config CloudWathLogs for trail SIS, created by CloudTrail\
+        \ console"
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource:
+          - "arn:aws:logs:ap-southeast-1:032425924378:log-group:aws-cloudtrail-logs-032425924378-3853cbc5:log-stream:032425924378_CloudTrail_ap-southeast-1*"
+          Action:
+          - "logs:CreateLogStream"
+          Effect: "Allow"
+          Sid: "AWSCloudTrailCreateLogStream2014110"
+        - Resource:
+          - "arn:aws:logs:ap-southeast-1:032425924378:log-group:aws-cloudtrail-logs-032425924378-3853cbc5:log-stream:032425924378_CloudTrail_ap-southeast-1*"
+          Action:
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+          Sid: "AWSCloudTrailPutLogEvents20141101"
+      Roles:
+      - Ref: "IAMRoleMyCloudTrailRole"
+      Users: []
+  EC2SubnetNetworkAclAssociationL1:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    DeletionPolicy: "Delete"
+    Properties:
+      NetworkAclId:
+        Ref: "EC2NetworkAcl"
+      SubnetId:
+        Ref: "EC2SubnetXi"
+  EC2Volume:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::Volume"
+    DeletionPolicy: "Delete"
+    Properties:
+      MultiAttachEnabled: false
+      SnapshotId: "snap-0839202f8824e33c8"
+      VolumeType: "gp2"
+      Encrypted: false
+      Size: 8
+      AutoEnableIO: true
+      AvailabilityZone: "ap-southeast-1a"
+      Iops: 100
+      Tags: []
+  EC2EIP527712163:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::EIP"
+    DeletionPolicy: "Delete"
+    Properties:
+      PublicIpv4Pool: "amazon"
+      Domain: "vpc"
+      Tags: []
+      NetworkBorderGroup: "ap-southeast-1"
+  S3BucketPolicyAwscloudtraillogs032425924378f5bda51f:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::S3::BucketPolicy"
+    DeletionPolicy: "Delete"
+    Properties:
+      Bucket:
+        Ref: "S3BucketAwscloudtraillogs032425924378f5bda51f"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Condition:
+            StringEquals:
+              AWS:SourceArn: "arn:aws:cloudtrail:ap-southeast-1:032425924378:trail/SIS"
+          Resource: "arn:aws:s3:::aws-cloudtrail-logs-032425924378-f5bda51f"
+          Action: "s3:GetBucketAcl"
+          Effect: "Allow"
+          Principal:
+            Service: "cloudtrail.amazonaws.com"
+          Sid: "AWSCloudTrailAclCheck20150319-df7a51a4-ee96-4593-8f71-ae2b7fceaf7d"
+        - Condition:
+            StringEquals:
+              AWS:SourceArn: "arn:aws:cloudtrail:ap-southeast-1:032425924378:trail/SIS"
+              s3:x-amz-acl: "bucket-owner-full-control"
+          Resource: "arn:aws:s3:::aws-cloudtrail-logs-032425924378-f5bda51f/AWSLogs/032425924378/*"
+          Action: "s3:PutObject"
+          Effect: "Allow"
+          Principal:
+            Service: "cloudtrail.amazonaws.com"
+          Sid: "AWSCloudTrailWrite20150319-903b9e08-4ba6-456e-9bf4-2d0eb362f9d2"
+        - Condition:
+            "Null":
+              s3:x-amz-server-side-encryption: "true"
+          Resource: "arn:aws:s3:::aws-cloudtrail-logs-032425924378-f5bda51f/*"
+          Action: "s3:PutObject"
+          Effect: "Deny"
+          Principal: "*"
+          Sid: "DenyUnencryptedUploads"
+  EC2VPC:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::VPC"
+    DeletionPolicy: "Delete"
+    Properties:
+      CidrBlock: "10.0.0.0/26"
+      EnableDnsSupport: true
+      InstanceTenancy: "default"
+      EnableDnsHostnames: true
+      Tags:
+      - Value: "my-vpc-1"
+        Key: "Name"
+  EC2RouteTable:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::EC2::RouteTable"
+    DeletionPolicy: "Delete"
+    Properties:
+      VpcId:
+        Ref: "EC2VPC"
+      Tags:
+      - Value: "Public-RT"
+        Key: "Name"
+  IAMRoleMyEC2Role:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
+      MaxSessionDuration: 3600
+      RoleName: "MyEC2Role"
+      Description: "Allows EC2 instances to call AWS services on your behalf."
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "ec2.amazonaws.com"
+  RDSDBInstanceVX:
+    UpdateReplacePolicy: "Delete"
+    Type: "AWS::RDS::DBInstance"
+    DeletionPolicy: "Delete"
+    Properties:
+      DatabaseInsightsMode: "standard"
+      StorageEncrypted: true
+      AssociatedRoles: []
+      Port: "3306"
+      ProcessorFeatures: []
+      StorageThroughput: 0
+      PreferredBackupWindow: "20:14-20:44"
+      MonitoringInterval: 0
+      DBParameterGroupName: "default.mysql8.0"
+      NetworkType: "IPV4"
+      DedicatedLogVolume: false
+      CopyTagsToSnapshot: true
+      MultiAZ: false
+      Engine: "mysql"
+      Tags: []
+      EngineLifecycleSupport: "open-source-rds-extended-support-disabled"
+      LicenseModel: "general-public-license"
+      EngineVersion: "8.0.41"
+      StorageType: "gp2"
+      KmsKeyId:
+        Fn::GetAtt:
+        - "KMSKey"
+        - "Arn"
+      DBInstanceClass: "db.t3.micro"
+      AvailabilityZone: "ap-southeast-1a"
+      OptionGroupName: "default:mysql-8-0"
+      PreferredMaintenanceWindow: "fri:19:40-fri:20:10"
+      EnablePerformanceInsights: false
+      AutoMinorVersionUpgrade: true
+      DBSubnetGroupName:
+        Ref: "RDSDBSubnetGroupDbsubnetgroup"
+      DeletionProtection: false
+      DBInstanceIdentifier: "sis-db"
+      AllocatedStorage: "20"
+      BackupTarget: "region"
+      CACertificateIdentifier: "rds-ca-rsa2048-g1"
+      ManageMasterUserPassword: false
+      MasterUserSecret: {}
+      VPCSecurityGroups:
+      - Fn::GetAtt:
+        - "EC2SecurityGroup"
+        - "GroupId"
+      DBSecurityGroups: []
+      MasterUsername: "admin"
+      DBName: "sis_db"
+      EnableIAMDatabaseAuthentication: false
+      MaxAllocatedStorage: 1000
+      BackupRetentionPeriod: 1
+      PubliclyAccessible: true
+      EnableCloudwatchLogsExports: []
